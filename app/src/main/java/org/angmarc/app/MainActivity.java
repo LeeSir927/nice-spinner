@@ -48,22 +48,16 @@ public class MainActivity extends AppCompatActivity {
         people.add(new Person("Steve", "Rogers"));
         people.add(new Person("Bruce", "Banner"));
 
-        SpinnerTextFormatter textFormatter = new SpinnerTextFormatter<Person>() {
-            @Override
-            public Spannable format(Person person) {
-                return new SpannableString(person.getName() + " " + person.getSurname());
-            }
-        };
+        SpinnerTextFormatter textFormatter = (SpinnerTextFormatter<Person>) person
+                -> new SpannableString(person.getName() + " " + person.getSurname());
 
         spinner.setSpinnerTextFormatter(textFormatter);
         spinner.setSelectedTextFormatter(textFormatter);
-        spinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener() {
-            @Override
-            public void onItemSelected(NiceSpinner parent, View view, int position, long id) {
-                Person person = (Person) spinner.getSelectedItem();
-                Toast.makeText(MainActivity.this, "Selected: " + person.toString(), Toast.LENGTH_SHORT).show();
-            }
+        spinner.setOnSpinnerItemSelectedListener((parent, view, position, id) -> {
+            Person person = (Person) spinner.getSelectedItem();
+            Toast.makeText(MainActivity.this, "Selected: " + person.toString(), Toast.LENGTH_SHORT).show();
         });
+        spinner.setListEntryLayout(R.layout.custom_spinner_list_item, R.id.text_view_spinner);
         spinner.attachDataSource(people);
     }
 
